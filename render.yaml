@@ -4,5 +4,5 @@ services:
   name: chat_online
   runtime: static
   repo: https://github.com/BitFlaviano/chat_online
-  staticPublishPath: Procfile/index.html
+  staticPublishPath: index.html
 version: "1"
