@@ -4,5 +4,5 @@ services:
   name: chat_online
   runtime: static
   repo: https://github.com/BitFlaviano/chat_online
-  staticPublishPath: server.js
+  staticPublishPath: node server.js
 version: "1"
