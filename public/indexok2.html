@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat em Rede</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        #chat-container, #name-container {
+            width: 400px;
+            margin: 50px auto;
+            border: 1px solid #ccc;
+            background: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        #chat-box {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+        .message {
+            margin: 5px 0;
+        }
+        .message span {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .my-message {
+            text-align: right;
+        }
+        .other-message {
+            text-align: left;
+        }
+        .timestamp {
+            font-size: 0.8em;
+            color: #999;
+        }
+        .input-container {
+            display: flex;
+            padding: 10px;
+            background: #eee;
+            border-top: 1px solid #ddd;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+        button {
+            padding: 8px;
+            background: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #4cae4c;
+        }
+        .email-button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        .email-button:hover {
+            background: #0069d9;
+        }
+		body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        #chat-container, #name-container {
+            width: 400px;
+            margin: 50px auto;
+            border: 1px solid #ccc;
+            background: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        #chat-box {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+        .message {
+            margin: 5px 0;
+        }
+        .message span {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .my-message {
+            text-align: right; /* Alinha suas mensagens à direita */
+        }
+        .other-message {
+            text-align: left; /* Alinha mensagens de outros usuários à esquerda */
+        }
+        .timestamp {
+            font-size: 0.8em; /* Tamanho menor para o timestamp */
+            color: #999;
+        }
+        .input-container {
+            display: flex;
+            padding: 10px;
+            background: #eee;
+            border-top: 1px solid #ddd;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            padding: 10px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #4cae4c;
+        }
+        #name-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+		.send-button, .leave-button {
+        padding: 8px;
+        background: #5cb85c;
+        color: white;
+        border: none;
+        border-radius: 5%;
+        cursor: pointer;
+		}
+		.leave-button {
+			background: #d9534f; /* Cor diferente para o botão de sair */
+			margin-left: 5px;
+		}
+		.send-button:hover {
+			background: #4cae4c;
+		}
+		.leave-button:hover {
+			background: #c9302c;
+		}
+    </style>
+</head>
+<body>
+    <div id="name-container">
+        <h2>Bem-vindo ao Chat!</h2>
+        <input type="text" id="name-input" placeholder="Digite seu nome..." required>
+        <div class="button-container">
+            <button onclick="startChat()">Entrar</button>
+        </div>
+		
+    </div>
+	
+    <div id="chat-container" style="display:none;">
+        <div id="chat-box"></div>
+        <div class="input-container">
+		
+            <input type="text" id="message-input" placeholder="Digite sua mensagem..." required>
+            <button class="send-button" onclick="sendMessage()"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/>
+    </svg></button>
+			<button class="leave-button" onclick="leaveChat()">Sair</button>
+        
+        </div id="chat-box">
+        <button class="email-button" onclick="sendEmail()">Enviar por Email</button>
+    </div>
+	</div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        let userName = '';
+        const messages = [];  // Array para armazenar as mensagens
+
+        function startChat() {
+            userName = document.getElementById('name-input').value.trim();
+            if (userName !== "") {
+                document.getElementById('name-container').style.display = 'none';
+                document.getElementById('chat-container').style.display = 'block';
+            }
+        }
+
+        socket.on('chatMessage', (data) => {
+            const chatBox = document.getElementById('chat-box');
+            const messageReceived = document.createElement('div');
+            const timestamp = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            messageReceived.className = 'message ' + (data.name === userName ? 'my-message' : 'other-message');
+            messageReceived.innerHTML = `<span>${data.name}:</span> ${data.message}<br><span class="timestamp">${timestamp}</span>`;
+            chatBox.appendChild(messageReceived);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Salva a mensagem no array
+            messages.push(`${data.name} (${timestamp}): ${data.message}`);
+        });
+
+        function sendMessage() {
+            const messageInput = document.getElementById('message-input');
+            const messageText = messageInput.value.trim();
+
+            if (messageText !== "" && userName !== "") {
+                const messageData = {
+                    name: userName,
+                    message: messageText,
+                    timestamp: Date.now()
+                };
+                socket.emit('chatMessage', messageData);
+                messageInput.value = '';
+            }
+        }
+		
+		function leaveChat() {
+            document.getElementById('chat-container').style.display = 'none';
+            document.getElementById('name-container').style.display = 'flex';
+            document.getElementById('name-input').value = userName; // Preenche o campo com o nome anterior
+        }
+
+        document.getElementById('message-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Impede a quebra de linha
+                sendMessage();
+            }
+        });
+		
+        // Função para enviar email
+        async function sendEmail() {
+            try {
+                const response = await fetch('/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ messages })
+                });
+                const result = await response.json();
+                alert(result.message);
+            } catch (error) {
+                console.error('Erro ao enviar email:', error);
+            }
+        }
+
+        document.getElementById('message-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
