@@ -1,4 +1,4 @@
-node server.js
+npm run build
 services:
 - type: web
   name: chat_online
