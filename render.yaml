@@ -4,7 +4,7 @@ services:
   name: chat_online
   runtime: static
   repo: https://github.com/BitFlaviano/chat_online
-  buildCommand: server.js
+  buildCommand: render.yaml
   staticPublishPath: public/index.html
   autoDeploy: false
 version: "1"
