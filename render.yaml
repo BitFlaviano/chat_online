@@ -1,8 +1,10 @@
-npm run server.js
+# Exported from Render on 2024-10-29T23:03:24Z
 services:
 - type: web
   name: chat_online
   runtime: static
   repo: https://github.com/BitFlaviano/chat_online
-  staticPublishPath: Profile/index.html
+  buildCommand: server.js
+  staticPublishPath: public/index.html
+  autoDeploy: false
 version: "1"
