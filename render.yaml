@@ -1,8 +1,8 @@
-# Exported from Render on 2024-10-29T21:35:28Z
+node server.js
 services:
 - type: web
   name: chat_online
   runtime: static
   repo: https://github.com/BitFlaviano/chat_online
-  staticPublishPath: node server.js
+  staticPublishPath: Profile/index.html
 version: "1"
