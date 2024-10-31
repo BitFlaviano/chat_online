@@ -4,6 +4,6 @@ eruservices:
     runtime: node
     repo: https://github.com/BitFlaviano/chat_online
     buildCommand: npm install
-    startCommand: node server.js  # Substitua "server.js" pelo nome do arquivo principal do servidor
+    startCommand: node index.html  # Substitua "server.js" pelo nome do arquivo principal do servidor
     autoDeploy: true
 version: "1"
