@@ -13,10 +13,10 @@ app.use(bodyParser.json());
 
 // Configura o Nodemailer
 const transporter = nodemailer.createTransport({
-    service: 'gmail', // Use 'gmail' ou ajuste conforme seu provedor de email
+    service: 'gmail', // Ajuste conforme o provedor de email
     auth: {
-        user: 'seuemail@gmail.com', // Substitua pelo seu email
-        pass: 'suasenha'            // Substitua pela sua senha
+        user: process.env.EMAIL_USER, // Use uma variável de ambiente para o email
+        pass: process.env.EMAIL_PASS  // Use uma variável de ambiente para a senha
     }
 });
 
@@ -28,12 +28,10 @@ io.on('connection', (socket) => {
 });
 io.on('connection', (socket) => {
     socket.on('userJoined', (name) => {
-        // Enviar a mensagem para todos os usuários conectados
         socket.broadcast.emit('userJoined', name);
     });
 
     socket.on('userLeft', (name) => {
-        // Enviar a mensagem para todos os usuários conectados
         socket.broadcast.emit('userLeft', name);
     });
 });
@@ -42,7 +40,7 @@ io.on('connection', (socket) => {
 app.post('/send-email', async (req, res) => {
     const messages = req.body.messages.join('\n');
     const mailOptions = {
-        from: 'seuemail@gmail.com',
+        from: process.env.EMAIL_USER,
         to: 'sousaportoflaviano@hotmail.com',
         subject: 'Histórico de Chat',
         text: messages
@@ -57,7 +55,8 @@ app.post('/send-email', async (req, res) => {
     }
 });
 
-const PORT = 3000;
+// Define a porta usando a variável de ambiente PORT
+const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
