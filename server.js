@@ -8,6 +8,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
+
 app.use(express.static('public'));
 app.use(bodyParser.json());
 
@@ -18,6 +19,9 @@ const transporter = nodemailer.createTransport({
         user: process.env.EMAIL_USER, // Use uma variável de ambiente para o email
         pass: process.env.EMAIL_PASS  // Use uma variável de ambiente para a senha
     }
+});
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/index.html');
 });
 
 io.on('connection', (socket) => {
