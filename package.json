@@ -1,4 +1,11 @@
 {
+  "name": "chat_online",
+  "version": "1.0.0",
+  "main": "server.js", // Indica o arquivo principal do seu servidor
+  "scripts": {
+    "start": "node server.js", // Comando para iniciar o servidor
+    "build": "npm install" // Pode ser usado para instalação de dependências
+  },
   "dependencies": {
     "express": "^4.21.1",
     "nodemailer": "^6.9.16",
