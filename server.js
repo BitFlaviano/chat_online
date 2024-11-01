@@ -60,7 +60,7 @@ app.post('/send-email', async (req, res) => {
 });
 
 // Define a porta usando a variável de ambiente PORT
-const PORT = 80;
+const PORT = process.env.PORT || 10000;
 server.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
