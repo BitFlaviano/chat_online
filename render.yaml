@@ -1,9 +1,9 @@
-erservices:
+services:
   - type: web
     name: chat_online
     runtime: node
     repo: https://github.com/BitFlaviano/chat_online
-    buildCommand: npm install
-    startCommand: node server.js
+    buildCommand: npm install  # Instala as dependências
+    startCommand: npm start    # Inicia o servidor com o comando de início
     autoDeploy: true
 version: "1"
