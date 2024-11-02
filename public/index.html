@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat em Rede</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-mart@latest/css/emoji-mart.css" />
-    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/emoji-mart.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-mart@3.0.1/css/emoji-mart.css">
+<script src="https://cdn.jsdelivr.net/npm/emoji-mart@3.0.1/dist/emoji-mart.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -227,35 +227,40 @@
         }
 
         let emojiPickerVisible = false;
-        function toggleEmojiPicker() {
-            const pickerContainer = document.getElementById('emoji-picker');
-            emojiPickerVisible = !emojiPickerVisible;
-            pickerContainer.style.display = emojiPickerVisible ? 'block' : 'none';
 
-            if (emojiPickerVisible) {
-                pickerContainer.innerHTML = '';
-                const picker = new EmojiMart.Picker({
-                    set: 'apple',
-                    onClick: addEmojiToMessage
-                });
-                pickerContainer.appendChild(picker);
-            }
-        }
-
-        function addEmojiToMessage(emoji) {
-            const messageInput = document.getElementById('message-input');
-            messageInput.value += emoji.native;
-        }
-
-        document.addEventListener('click', (event) => {
-            const pickerContainer = document.getElementById('emoji-picker');
-            const emojiButton = document.getElementById('emoji-button');
-
-            if (emojiPickerVisible && !pickerContainer.contains(event.target) && event.target !== emojiButton) {
-                pickerContainer.style.display = 'none';
-                emojiPickerVisible = false;
-            }
+function toggleEmojiPicker() {
+    const pickerContainer = document.getElementById('emoji-picker');
+    if (!emojiPickerVisible) {
+        // Inicializa o Emoji Picker apenas quando necessário
+        pickerContainer.innerHTML = ''; // Limpa o container antes de adicionar o picker
+        const picker = new EmojiMart.Picker({
+            set: 'apple',
+            onClick: (emoji) => addEmojiToMessage(emoji)
         });
+        pickerContainer.appendChild(picker);
+        pickerContainer.style.display = 'block';
+    } else {
+        pickerContainer.style.display = 'none';
+    }
+    emojiPickerVisible = !emojiPickerVisible;
+}
+
+function addEmojiToMessage(emoji) {
+    const messageInput = document.getElementById('message-input');
+    messageInput.value += emoji.native;
+}
+
+// Fecha o picker se clicar fora dele
+document.addEventListener('click', (event) => {
+    const pickerContainer = document.getElementById('emoji-picker');
+    const emojiButton = document.getElementById('emoji-button');
+
+    if (emojiPickerVisible && !pickerContainer.contains(event.target) && event.target !== emojiButton) {
+        pickerContainer.style.display = 'none';
+        emojiPickerVisible = false;
+    }
+});
+       
 
         function sendEmail() {
             const messageContent = messages.join('\n');
