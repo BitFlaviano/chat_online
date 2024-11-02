@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    ...
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-mart@latest/css/emoji-mart.css" />
-    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/emoji-mart.min.js"></script>
-    ...
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat em Rede</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-mart@latest/css/emoji-mart.css" />
+    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/emoji-mart.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -111,7 +109,6 @@
         .leave-button:hover {
             background: #c9302c;
         }
-        /* Estilos para a tela de entrada */
         #name-container {
             display: flex;
             flex-direction: column;
@@ -121,39 +118,39 @@
         }
         #name-container input {
             width: 100%;
-            max-width: 300px; /* Limita a largura do input */
+            max-width: 300px;
         }
         #emoji-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2em;
-    margin-right: 5px;
-}
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
     <div id="name-container">
         <h2>Bem-vindo ao Chat!</h2>
         <input type="text" id="name-input" placeholder="Digite seu nome..." required>
-        
         <div class="button-container">
             <button onclick="startChat()">Entrar</button>
         </div>
     </div>
 
-    <div class="input-container">
-    <button id="emoji-button" onclick="toggleEmojiPicker()">😊</button> <!-- Botão de emojis -->
-    <input type="text" id="message-input" placeholder="Digite sua mensagem..." required>
-    <button class="send-button" onclick="sendMessage()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/>
-        </svg>
-    </button>
-    <button class="leave-button" onclick="leaveChat()">Sair</button>
-</div>
-<div id="emoji-picker" style="display: none;"></div> <!-- Contêiner do emoji picker -->
-<div>
+    <div id="chat-container" style="display:none;">
+        <div id="chat-box"></div>
+        <div class="input-container">
+            <button id="emoji-button" onclick="toggleEmojiPicker()">😊</button>
+            <input type="text" id="message-input" placeholder="Digite sua mensagem..." required>
+            <button class="send-button" onclick="sendMessage()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/>
+                </svg>
+            </button>
+            <button class="leave-button" onclick="leaveChat()">Sair</button>
+        </div>
+        <div id="emoji-picker" style="display: none;"></div>
         <button class="email-button" onclick="sendEmail()">Enviar por Email</button>
     </div>
 
@@ -165,7 +162,6 @@
     </script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-                const notificationSound = new Audio('/pop.mp3')
         const socket = io();
         let userName = '';
         const messages = [];
@@ -175,8 +171,6 @@
             if (userName !== "") {
                 document.getElementById('name-container').style.display = 'none';
                 document.getElementById('chat-container').style.display = 'block';
-
-                // Enviar mensagem de entrada
                 socket.emit('userJoined', userName);
             }
         }
@@ -207,60 +201,19 @@
         });
 
         socket.on('chatMessage', (data) => {
-
-        const chatBox = document.getElementById('chat-box');
-        const messageReceived = document.createElement('div');
-        const timestamp = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-        messageReceived.className = 'message ' + (data.name === userName ? 'my-message' : 'other-message');
-        messageReceived.innerHTML = `<span>${data.name}:</span> ${data.message}<br><span class="timestamp">${timestamp}</span>`;
-        chatBox.appendChild(messageReceived);
-        chatBox.scrollTop = chatBox.scrollHeight;
-
-        messages.push(`${data.name} (${timestamp}): ${data.message}`);
-
-                        //if (data.name !== userName) { // Notifica apenas se a mensagem vier de outro usuário
-                                //showNotification(data.name, data.message);
-                        if (data.name !== userName) { // Notifica apenas se a mensagem vier de outro usuário
-                                notificationSound.play()
-                        }
+            const chatBox = document.getElementById('chat-box');
+            const messageReceived = document.createElement('div');
+            const timestamp = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            messageReceived.className = 'message ' + (data.name === userName ? 'my-message' : 'other-message');
+            messageReceived.innerHTML = `<span>${data.name}:</span> ${data.message}<br><span class="timestamp">${timestamp}</span>`;
+            chatBox.appendChild(messageReceived);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            messages.push(`${data.name} (${timestamp}): ${data.message}`);
         });
-        let emojiPickerVisible = false;
 
-function toggleEmojiPicker() {
-    const pickerContainer = document.getElementById('emoji-picker');
-    emojiPickerVisible = !emojiPickerVisible;
-    pickerContainer.style.display = emojiPickerVisible ? 'block' : 'none';
-
-    if (emojiPickerVisible) {
-        pickerContainer.innerHTML = '';
-        const picker = new EmojiMart.Picker({
-            set: 'apple',
-            onClick: addEmojiToMessage
-        });
-        pickerContainer.appendChild(picker);
-    }
-}
-
-function addEmojiToMessage(emoji) {
-    const messageInput = document.getElementById('message-input');
-    messageInput.value += emoji.native;
-}
-
-// Fechar o seletor ao clicar fora dele
-document.addEventListener('click', (event) => {
-    const pickerContainer = document.getElementById('emoji-picker');
-    const emojiButton = document.getElementById('emoji-button');
-
-    if (emojiPickerVisible && !pickerContainer.contains(event.target) && event.target !== emojiButton) {
-        pickerContainer.style.display = 'none';
-        emojiPickerVisible = false;
-    }
-});
         function sendMessage() {
             const messageInput = document.getElementById('message-input');
             const messageText = messageInput.value.trim();
-
             if (messageText !== "" && userName !== "") {
                 const messageData = {
                     name: userName,
@@ -273,58 +226,29 @@ document.addEventListener('click', (event) => {
             }
         }
 
-                document.addEventListener('DOMContentLoaded', () => {
-                        if (Notification.permission !== 'granted') {
-                                Notification.requestPermission();
-                        }
+        let emojiPickerVisible = false;
+        function toggleEmojiPicker() {
+            const pickerContainer = document.getElementById('emoji-picker');
+            emojiPickerVisible = !emojiPickerVisible;
+            pickerContainer.style.display = emojiPickerVisible ? 'block' : 'none';
+
+            if (emojiPickerVisible) {
+                pickerContainer.innerHTML = '';
+                const picker = new EmojiMart.Picker({
+                    set: 'apple',
+                    onClick: addEmojiToMessage
                 });
-                function showNotification(user, message) {
-                                if (Notification.permission === 'granted') {
-                                        new Notification(user, {
-                                        body: message,
-                                        icon: '/path/to/icon.png' // Opcional, um ícone para a notificação
-                                        });
-                                }
-                }
-
-
-        document.getElementById('message-input').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                sendMessage();
+                pickerContainer.appendChild(picker);
             }
-        });
+        }
 
-        function sendEmail() {
-                        const sendButton = document.querySelector('.email-button');
-                        sendButton.disabled = true;
+        function addEmojiToMessage(emoji) {
+            const messageInput = document.getElementById('message-input');
+            messageInput.value += emoji.native;
+        }
 
-                        // Formatar mensagens para texto simples ou HTML
-                        const formattedMessages = messages.join('\n'); // Para texto simples
+        document.addEventListener('click', (event) => {
+            const pickerContainer = document.getElementById('emoji-picker');
+            const emojiButton = document.getElementById('emoji-button');
 
-                        const templateParams = {
-                                from_name: userName,
-                                messages: formattedMessages, // Apenas texto simples
-                                // Para HTML:
-                                // messages: `<pre>${formattedMessages}</pre>`, // Para manter formatação com HTML
-                                to_email: 'eudavi886@gmail.com'
-                        };
-
-                        emailjs.send('service_wog62om', 'template_g11n86g', templateParams)
-                                .then(function(response) {
-                                        alert('E-mail enviado com sucesso!');
-                                        console.log('E-mail enviado:', response); // Log de sucesso
-                                        sendButton.disabled = false;
-                                }, function(error) {        
-                                        console.error('Erro ao enviar o e-mail:', error); // Log de erro
-                                        alert('Ocorreu um erro ao enviar o e-mail. Tente novamente mais tarde.');
-                                        sendButton.disabled = false;
-                                });
-                }
-
-    </script>
-</body>
-<footer style="text-align: center; padding: 10px; background: #f4f4f4; border-top: 1px solid #ddd;">
-        <p>&copy; 2024 Flaviano Porto. Todos os direitos reservados.</p>
-    </footer>
-</html>
+            if (emojiPickerVisible && !pickerContainer.contains(event.target) && event.target !== emojiButton
