@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Online</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-mart@3.0.1/css/emoji-mart.css">
+    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@3.0.1/dist/emoji-mart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.2/dist/index.min.js"></script>
+</head>
+<body>
+    <div id="name-container">
+        <h2>Bem-vindo ao Chat!</h2>
+        <input type="text" id="name-input" placeholder="Digite seu nome..." required>
+        <div class="button-container">
+            <button onclick="startChat()">Entrar</button>
+        </div>
+    </div>
+
+    <div id="chat-container" style="display:none;">
+        <div id="chat-box"></div>
+        <div class="input-container">
+            
+            <input type="text" id="message-input" placeholder="Digite sua mensagem..." required>
+            <!--<button id="emoji-button" onclick="toggleEmojiPicker()">😊</button> -->
+            
+            <button class="send-button" onclick="sendMessage()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/>
+                </svg>
+            </button>
+            <button class="leave-button" onclick="leaveChat()">Sair</button>
+            <div id="emoji-picker" style="position: absolute; bottom: 60px; left: 10px; z-index: 1; display: none;"></div>
+
+        </div>
+        <button class="email-button" onclick="sendEmail()">Enviar por Email</button>
+        <div id="emoji-picker" style="position: absolute; bottom: 60px; left: 10px; z-index: 1; display: none;"></div>
+    
+        <!-- Botão para ativar/desativar o som de notificação -->
+        <button class="toggle-sound" onclick="toggleSound()">🔊 Ativado</button>
+    </div>
+    
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="scripts.js"></script>
+    <script src="picker.js"></script>
+</body>
+<footer style="text-align: center; padding: 10px; background: #f4f4f4; border-top: 1px solid #ddd;">
+    <p>&copy; 2024 Flaviano Porto. Todos os direitos reservados.</p>
+</footer>
+</html>

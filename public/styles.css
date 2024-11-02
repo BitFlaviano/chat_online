@@ -1,0 +1,154 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+#chat-container, #name-container {
+    width: 400px;
+    margin: 50px auto;
+    border: 1px solid #ccc;
+    background: #fff;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#chat-box {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background: #f9f9f9;
+}
+
+.message {
+    margin: 5px 0;
+}
+
+.message span {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.my-message {
+    text-align: right;
+}
+
+.other-message {
+    text-align: left;
+}
+
+.timestamp {
+    font-size: 0.9em;
+    color: #007bff;
+    text-align: center;
+}
+
+.input-container {
+    display: flex;
+    padding: 10px;
+    background: #eee;
+    border-top: 1px solid #ddd;
+    align-items: center;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #4cae4c;
+}
+
+.email-button {
+    width: 100%;
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.email-button:hover {
+    background: #0069d9;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.send-button, .leave-button {
+    padding: 8px;
+    background: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 0%;
+    cursor: pointer;
+}
+
+.leave-button {
+    background: #d9534f;
+    margin-left: 5px;
+}
+
+.send-button:hover {
+    background: #4cae4c;
+}
+
+.leave-button:hover {
+    background: #c9302c;
+}
+
+#name-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+#name-container input {
+    width: 100%;
+    max-width: 300px;
+}
+#emoji-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    margin-right: 5px;
+}
+.toggle-sound {
+    width: 100%;
+    padding: 10px;
+    background: #f0ad4e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.toggle-sound:hover {
+    background: #ec971f;
+}
