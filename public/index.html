@@ -251,4 +251,23 @@
             const pickerContainer = document.getElementById('emoji-picker');
             const emojiButton = document.getElementById('emoji-button');
 
-            if (emojiPickerVisible && !pickerContainer.contains(event.target) && event.target !== emojiButton
+            if (emojiPickerVisible && !pickerContainer.contains(event.target) && event.target !== emojiButton) {
+                pickerContainer.style.display = 'none';
+                emojiPickerVisible = false;
+            }
+        });
+
+        function sendEmail() {
+            const messageContent = messages.join('\n');
+            emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+                message: messageContent,
+                user_name: userName,
+            }).then((response) => {
+                alert("Email enviado com sucesso!");
+            }, (error) => {
+                alert("Erro ao enviar email.");
+            });
+        }
+    </script>
+</body>
+</html>
