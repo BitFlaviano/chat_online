@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    ...
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-mart@latest/css/emoji-mart.css" />
+    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/emoji-mart.min.js"></script>
+    ...
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat em Rede</title>
@@ -138,11 +142,8 @@
         </div>
     </div>
 
-    <div id="chat-container" style="display:none;">
-        <div id="chat-box"></div>
-        <div class="input-container">
-            <div class="input-container">
-    <button id="emoji-button" onclick="toggleEmojiPicker()">😊</button>
+    <div class="input-container">
+    <button id="emoji-button" onclick="toggleEmojiPicker()">😊</button> <!-- Botão de emojis -->
     <input type="text" id="message-input" placeholder="Digite sua mensagem..." required>
     <button class="send-button" onclick="sendMessage()">
         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 24 24">
@@ -151,14 +152,8 @@
     </button>
     <button class="leave-button" onclick="leaveChat()">Sair</button>
 </div>
-<div id="emoji-picker" style="display: none;"></div>
-            <button class="send-button" onclick="sendMessage()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/>
-                </svg>
-            </button>
-            <button class="leave-button" onclick="leaveChat()">Sair</button>
-        </div>
+<div id="emoji-picker" style="display: none;"></div> <!-- Contêiner do emoji picker -->
+<div>
         <button class="email-button" onclick="sendEmail()">Enviar por Email</button>
     </div>
 
