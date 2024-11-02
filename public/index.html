@@ -119,12 +119,30 @@
             width: 100%;
             max-width: 300px; /* Limita a largura do input */
         }
+        #emoji-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    margin-right: 5px;
+}
     </style>
 </head>
 <body>
     <div id="name-container">
         <h2>Bem-vindo ao Chat!</h2>
         <input type="text" id="name-input" placeholder="Digite seu nome..." required>
+        <div class="input-container">
+    <button id="emoji-button" onclick="toggleEmojiPicker()">😊</button>
+    <input type="text" id="message-input" placeholder="Digite sua mensagem..." required>
+    <button class="send-button" onclick="sendMessage()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/>
+        </svg>
+    </button>
+    <button class="leave-button" onclick="leaveChat()">Sair</button>
+</div>
+<div id="emoji-picker" style="display: none;"></div>
         <div class="button-container">
             <button onclick="startChat()">Entrar</button>
         </div>
@@ -212,7 +230,38 @@
                                 notificationSound.play()
                         }
         });
+        let emojiPickerVisible = false;
 
+function toggleEmojiPicker() {
+    const pickerContainer = document.getElementById('emoji-picker');
+    emojiPickerVisible = !emojiPickerVisible;
+    pickerContainer.style.display = emojiPickerVisible ? 'block' : 'none';
+
+    if (emojiPickerVisible) {
+        pickerContainer.innerHTML = '';
+        const picker = new EmojiMart.Picker({
+            set: 'apple',
+            onClick: addEmojiToMessage
+        });
+        pickerContainer.appendChild(picker);
+    }
+}
+
+function addEmojiToMessage(emoji) {
+    const messageInput = document.getElementById('message-input');
+    messageInput.value += emoji.native;
+}
+
+// Fechar o seletor ao clicar fora dele
+document.addEventListener('click', (event) => {
+    const pickerContainer = document.getElementById('emoji-picker');
+    const emojiButton = document.getElementById('emoji-button');
+
+    if (emojiPickerVisible && !pickerContainer.contains(event.target) && event.target !== emojiButton) {
+        pickerContainer.style.display = 'none';
+        emojiPickerVisible = false;
+    }
+});
         function sendMessage() {
             const messageInput = document.getElementById('message-input');
             const messageText = messageInput.value.trim();
